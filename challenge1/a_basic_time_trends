@@ -38,7 +38,7 @@ tweets['date'] = tweets['datetime'].dt.date
 ######################################################
 # Using some functions to describe your data
 print('Your data set has %i objects' % len(tweets))
-print('Tweets are recorded between %s and %s)' % (str(tweets['datetime'].min()), str(tweebts['datetime'].max())))
+print('Tweets are recorded between %s and %s)' % (str(tweets['datetime'].min()), str(tweets['datetime'].max())))
 
 ######################################################
 # Aggregating data
