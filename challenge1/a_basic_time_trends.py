@@ -20,7 +20,7 @@ plotting.register_matplotlib_converters()
 tweets = pd.read_csv('../data/twitter/tweets.csv')
 
 ######################################################
-# Formating time data
+# Formatting time data
 
 # Raw data in miliseconds
 print('This is an example time data in milliseconds')
