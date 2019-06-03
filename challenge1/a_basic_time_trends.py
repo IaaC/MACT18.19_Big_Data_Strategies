@@ -49,6 +49,7 @@ grouped_city_day = tweets.groupby(['city', 'date'])
 # Creating simple graphs based on the grouped data
 # the unstack function helps to use the indicated index as axes
 grouped_city_day['id'].count().unstack(level=0).plot(kind='line')
+plt.show()
 grouped_city_day['id'].count().unstack(level=0).plot(kind='area', alpha=0.4)
 grouped_city_day['id'].count().unstack(level=0).plot(kind='area', subplots=True)
 

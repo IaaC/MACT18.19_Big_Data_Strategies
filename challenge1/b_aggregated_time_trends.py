@@ -51,6 +51,8 @@ tweets_user.loc[tweets_user['tweets'] >= weeks, 'per_day'] = 'c' #'c. < 1 per da
 tweets_user.loc[tweets_user['tweets'] >= days.days, 'per_day'] = 'd'#'d. 1+ per day'
 tweets_user.loc[tweets_user['tweets'] >= days.days * 2, 'per_day'] = 'e'#'e. 2+ per day'
 
+# tweets_user = tweets_user.loc[tweets_user['tweets'] >= weeks]
+
 tweets_cities_frequency = tweets_user.groupby(['city', 'per_day']).count()
 # Pie charts per city showing the frequency of tweets per user per city
 tweets_cities_frequency['tweets'].unstack(level=0).plot(kind='pie', subplots=True, labels=None)
