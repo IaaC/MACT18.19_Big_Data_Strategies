@@ -51,6 +51,7 @@ tweets_user.loc[tweets_user['tweets'] >= weeks, 'per_day'] = 'c' #'c. < 1 per da
 tweets_user.loc[tweets_user['tweets'] >= days.days, 'per_day'] = 'd'#'d. 1+ per day'
 tweets_user.loc[tweets_user['tweets'] >= days.days * 2, 'per_day'] = 'e'#'e. 2+ per day'
 
+# Use this line to filter out tweets from users tweeting frequently, at least once a week
 # tweets_user = tweets_user.loc[tweets_user['tweets'] >= weeks]
 
 tweets_cities_frequency = tweets_user.groupby(['city', 'per_day']).count()
