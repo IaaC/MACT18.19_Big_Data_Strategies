@@ -40,8 +40,8 @@ print('This text uses %i characters per word' % (len(tweets['text'][100])/len(tw
 # Graphical representation of text features
 
 # Counting tweets per city and language
-lang_of_ing = ['en', 'es', 'ca', 'ja', 'fr', 'pt', 'und'] # ['en', 'es', 'ca', 'ja', 'de', 'fr', 'it', 'pt', 'ar', 'ko', 'und']
-lang_pattern = '|'.join(lang_of_ing)
+lang_of_int = ['en', 'es', 'ca', 'ja', 'fr', 'pt', 'und'] # ['en', 'es', 'ca', 'ja', 'de', 'fr', 'it', 'pt', 'ar', 'ko', 'und']
+lang_pattern = '|'.join(lang_of_int)
 tweets_lang = tweets.loc[:, ['language', 'city']]
 tweets_lang['lang_of_int'] = tweets_lang['language']
 tweets_lang.loc[(tweets_lang['lang_of_int'].str.contains(lang_pattern)) == False, 'lang_of_int'] = 'other'

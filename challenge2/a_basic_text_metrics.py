@@ -44,7 +44,7 @@ tweets['text_total_characters'] = tweets['text'].str.len()
 
 # Graphical representing adding color
 languages = tweets['language'].unique()
-#sns.lmplot('text_total_words', 'text_total_characters', data=tweets, hue='language', fit_reg=False)
+# sns.lmplot('text_total_words', 'text_total_characters', data=tweets, hue='language', fit_reg=False)
 tweets.plot(kind='hexbin', x='text_total_characters', y='text_total_words')
 plt.show()
 
