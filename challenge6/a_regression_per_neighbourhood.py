@@ -11,14 +11,16 @@
 
 import pandas as pd
 from pandas import plotting
-from shapely.geometry import Point
+import geopandas
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.linear_model import LinearRegression
 plotting.register_matplotlib_converters()
 
 
 ######################################################
 # Read the different files starting with the last file
+neighbourhoods = geopandas.read_file('../data/opendatabcn/neighbourhoods_barcelona_wgs84.geojson')
 irf_2007 = pd.read_csv('../data/opendatabcn/2007_distribucio_territorial_renda_familiar.csv')
 irf_2008 = pd.read_csv('../data/opendatabcn/2008_distribucio_territorial_renda_familiar.csv')
 irf_2009 = pd.read_csv('../data/opendatabcn/2009_distribucio_territorial_renda_familiar.csv')
@@ -41,16 +43,51 @@ index_concat.columns = ['year', 'district', 'name_district', 'neighbourhood', 'n
                         'population', 'index']
 index_concat['index'] = index_concat['index'].apply(pd.to_numeric, errors='coerce')
 
-# A simple plot
-sns.scatterplot(x='population', y='index',  hue='name_district', data=index_concat, s=30)
+# Fitting a model for  "Poble nou" id = 68
+neighbourhood = index_concat.loc[index_concat['neighbourhood'] == 68, ['year', 'index']]
+x = neighbourhood.loc[:, ['year']].values
+y = neighbourhood.loc[:, ['index']].values
+
+lm = LinearRegression()
+lm.fit(x, y)
+
+sns.lmplot(x='year', y='index', data=neighbourhood)
 plt.show()
 
-# A line plot per neighbourhood
-sns.lineplot(x='year', y='index', hue='name_neighbourhood', data=index_concat)
+if lm.coef_[0, 0] > 0:
+    print('positive trend')
+else:
+    print('negative trend')
+
+print('Option regression done concat')
+
+
+# Automatic generation of plot regression
+neighbourhoods['trend'] = ''
+neighbourhoods['index_2018'] = 0
+neighbourhoods['BARRI'] = pd.to_numeric(neighbourhoods['BARRI'])
+n_codes = neighbourhoods['BARRI'].unique()
+for n in n_codes:
+    label = 'reg_%i' % n
+    neighbourhood = index_concat.loc[index_concat['neighbourhood'] == n, ['year', 'index']]
+    x = neighbourhood.loc[:, ['year']].values
+    y = neighbourhood.loc[:, ['index']].values
+    lm = LinearRegression()
+    lm.fit(x, y)
+
+    # sns.lmplot(x='year', y='index', data=neighbourhood)
+    # plt.savefig('../data/temp/%s.png' % label)
+    if lm.coef_[0, 0] > 0:
+        trend = 'positive trend'
+    else:
+        trend = 'negative trend'
+    neighbourhoods.loc[neighbourhoods['BARRI'] == n, 'trend'] = trend
+    neighbourhoods.loc[neighbourhoods['BARRI'] == n, 'index_2018'] = lm.predict([[2018]])
+
+neighbourhoods.plot(column='trend', legend=True)
 plt.show()
 
-# using facet grids
-grid = sns.FacetGrid(index_concat, col='name_district', hue="name_neighbourhood", height=4, aspect=.5)
-grid = grid.map(plt.plot, 'year', 'index')
+neighbourhoods.plot(column='index_2018', legend=True)
+plt.show()
 
-print('Option B using concat')
+print('Map updated after linear model')

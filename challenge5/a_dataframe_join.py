@@ -11,8 +11,6 @@
 
 import pandas as pd
 from pandas import plotting
-import geopandas
-from shapely.geometry import Point
 import matplotlib.pyplot as plt
 import seaborn as sns
 plotting.register_matplotlib_converters()
@@ -20,7 +18,6 @@ plotting.register_matplotlib_converters()
 
 ######################################################
 # Read the different files starting with the last file
-neighbourhoods = geopandas.read_file('../data/opendatabcn/neighbourhoods_barcelona_wgs84.geojson')
 irf_2007 = pd.read_csv('../data/opendatabcn/2007_distribucio_territorial_renda_familiar.csv')
 irf_2008 = pd.read_csv('../data/opendatabcn/2008_distribucio_territorial_renda_familiar.csv')
 irf_2009 = pd.read_csv('../data/opendatabcn/2009_distribucio_territorial_renda_familiar.csv')

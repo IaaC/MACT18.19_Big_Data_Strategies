@@ -11,14 +11,16 @@
 
 import pandas as pd
 from pandas import plotting
-from shapely.geometry import Point
+import geopandas
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.linear_model import LinearRegression
 plotting.register_matplotlib_converters()
 
 
 ######################################################
 # Read the different files starting with the last file
+neighbourhoods = geopandas.read_file('../data/opendatabcn/neighbourhoods_barcelona_wgs84.geojson')
 irf_2007 = pd.read_csv('../data/opendatabcn/2007_distribucio_territorial_renda_familiar.csv')
 irf_2008 = pd.read_csv('../data/opendatabcn/2008_distribucio_territorial_renda_familiar.csv')
 irf_2009 = pd.read_csv('../data/opendatabcn/2009_distribucio_territorial_renda_familiar.csv')
@@ -41,16 +43,14 @@ index_concat.columns = ['year', 'district', 'name_district', 'neighbourhood', 'n
                         'population', 'index']
 index_concat['index'] = index_concat['index'].apply(pd.to_numeric, errors='coerce')
 
-# A simple plot
-sns.scatterplot(x='population', y='index',  hue='name_district', data=index_concat, s=30)
-plt.show()
+# Automatic generation of plot regression
+neighbourhoods['neighbourhood'] = pd.to_numeric(neighbourhoods['BARRI'])
+years = index_concat['year'].unique()
+for y in years:
+    label = 'idx_%i' % y
+    index_year = index_concat.loc[index_concat['year'] == y, ['neighbourhood', 'index']]
+    idx_year = pd.merge(neighbourhoods, index_year, on=['neighbourhood'])
+    idx_year.plot(column='index', legend=True)
+    plt.savefig('../data/temp/%s.png' % label)
 
-# A line plot per neighbourhood
-sns.lineplot(x='year', y='index', hue='name_neighbourhood', data=index_concat)
-plt.show()
-
-# using facet grids
-grid = sns.FacetGrid(index_concat, col='name_district', hue="name_neighbourhood", height=4, aspect=.5)
-grid = grid.map(plt.plot, 'year', 'index')
-
-print('Option B using concat')
+print('Maps saved')
