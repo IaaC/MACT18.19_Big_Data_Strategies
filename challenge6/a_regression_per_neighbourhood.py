@@ -14,7 +14,7 @@ from pandas import plotting
 import geopandas
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression   # Library scikit-learn
 plotting.register_matplotlib_converters()
 
 

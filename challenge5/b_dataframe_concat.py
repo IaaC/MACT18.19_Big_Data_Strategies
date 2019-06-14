@@ -52,5 +52,6 @@ plt.show()
 # using facet grids
 grid = sns.FacetGrid(index_concat, col='name_district', hue="name_neighbourhood", height=4, aspect=.5)
 grid = grid.map(plt.plot, 'year', 'index')
+plt.show()
 
 print('Option B using concat')
